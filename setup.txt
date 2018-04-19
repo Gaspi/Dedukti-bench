@@ -1,0 +1,26 @@
+
+sudo apt update
+sudo apt install man git emacs opam m4
+
+opam init
+eval `opam config env`
+
+mkdir git
+cd git
+git clone -b master https://github.com/Deducteam/Dedukti.git master
+cd master
+
+opam pin add --no-action dedukti .
+opam install --deps-only dedukti
+#### Alternatively #####
+opam install conf-m4 ocamlfind menhir
+
+make tests
+
+cd ~
+mkdir bench
+cd bench
+
+
+
+
