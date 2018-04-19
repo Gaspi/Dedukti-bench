@@ -1,33 +1,20 @@
 #!/bin/bash
 
-script_version=0.1
-
-sep='|'
-database=~/bench.csv
-sources_folder=dedukti
-benchs_folder=benchs
+dir=$(pwd)
+source $dir/paths.sh
 
 uuid=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 date_unix_timestamp=$(date +%s)
 date=$(date -d @$date_unix_timestamp)
 
+echo ""
 echo "-------------------------------------------------------------"
-echo "                 Dedukti Benchmarking Tool"
+echo "                       Running bench"
 echo "-------------------------------------------------------------"
 echo "    Bench nb: $uuid"
 echo "    Date:     $date"
 echo "    Revision: $1"
 echo "-------------------------------------------------------------"
-
-if [ ! -f $database ]
-then
-	bash fresh-db.sh "$database"
-fi
-
-dir=$(pwd)
-out_file=$dir/out.csv
-BENCHS=$dir/$benchs_folder/
-SOURCES=$dir/$sources_folder/
 
 rm -rf $BENCHS $SOURCES
 mkdir $BENCHS
