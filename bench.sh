@@ -64,22 +64,28 @@ log "$commit_date"
 echo "-------------------------------------------------------------"
 echo "                    Bench 0 : Compilation"
 echo "-------------------------------------------------------------"
-$timec -a -o $SOURCES/time.csv make
+$timec -a -o $SOURCES/compile.csv make
+log_file $SOURCES/compile.csv
 
-log_file $SOURCES/time.csv
 
+echo "-------------------------------------------------------------"
+echo "                    Bench 1 : Tests"
+echo "-------------------------------------------------------------"
+$timec -a -o $SOURCES/tests.csv make tests
+log_file $SOURCES/tests.csv
+
+
+# Exporting DKCHECK and DKDEP to be used in following tests
 export DKCHECK=$SOURCES/dkcheck.native
 export DKDEP=$SOURCES/dkdep.native
 
 
 
-
-
 echo "-------------------------------------------------------------"
-echo "                    Bench 1 : Matita"
+echo "                    Bench 2 : Matita"
 echo "-------------------------------------------------------------"
-mkdir $BENCHS/bench1
-cd $BENCHS/bench1
+mkdir $BENCHS/bench2
+cd $BENCHS/bench2
 
 wget -q https://deducteam.github.io/data/libraries/matita.tar.gz
 tar zxf matita.tar.gz
@@ -93,21 +99,21 @@ rm matita/matita_arithmetics_gcd.dk
 rm matita/matita_arithmetics_ord.dk
 rm matita/matita_arithmetics_primes.dk
 
-$timec -a -o $BENCHS/bench1/time.csv make -C matita
-log_file $BENCHS/bench1/time.csv
+$timec -a -o $BENCHS/bench2/time.csv make -C matita
+log_file $BENCHS/bench2/time.csv
 
 
 
 echo "-------------------------------------------------------------"
-echo "                    Bench 2 : DKlib"
+echo "                    Bench 3 : DKlib"
 echo "-------------------------------------------------------------"
-mkdir $BENCHS/bench2
-cd $BENCHS/bench2
+mkdir $BENCHS/bench3
+cd $BENCHS/bench3
 
 git clone -q -b v2.6 https://github.com/rafoo/dklib.git
 
-$timec -a -o $BENCHS/bench2/time.csv make -C dklib
-log_file $BENCHS/bench2/time.csv
+$timec -a -o $BENCHS/bench3/time.csv make -C dklib
+log_file $BENCHS/bench3/time.csv
 
 
 

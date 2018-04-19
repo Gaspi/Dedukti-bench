@@ -31,5 +31,6 @@ pr_times () {
 pr_times 0
 pr_times 1
 pr_times 2
+pr_times 3
 
 echo "" >> $db
