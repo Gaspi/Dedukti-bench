@@ -1,32 +1,47 @@
 #!/bin/bash
 
-dir=$(pwd)
-date=$(date)
+log_file=$dir/log
+sep='|'
 
-NEW_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-
-export TIME='%E | %U | %S | %M | %K | %W'
+SOURCES=$dir/dedukti/
 
 timec=/usr/bin/time
 
-log_file=$dir/log
+time_format="%E $sep %U $sep %S $sep %M $sep %K $sep %W"
 
-echo "-------------------------------"
-echo "Date: $date"
-echo "Running benchmark for: $1"
-echo "Bench n° $NEW_UUID"
-echo "-------------------------------"
+dir=$(pwd)
+date=$(date)
+uuid=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-rm $log_file
-echo "$NEW_UUID |" >> $log_file
-echo "$date |" >> $log_file
-echo "$1 |" >> $log_file
+echo "-------------------------------------------------------"
+echo "             Dedukti Benchmarking Tool"
+echo "-------------------------------------------------------"
+echo "  Bench nb: $uuid"
+echo "  Date:     $date"
+echo "  Revision: $1"
+echo "-------------------------------------------------------"
 
-rm -rf ./dedukti
+DKCHECK=$SOURCES/dkcheck.native
 
-git clone https://github.com/Deducteam/Dedukti.git dedukti
-cd dedukti
+export TIME="$time_format"
+
+printf "$uuid" > $log_file
+
+log () {
+	printf " $sep $1" >> $log_file
+}
+
+log "$date"
+log "$1"
+
+rm -rf $SOURCES
+git clone https://github.com/Deducteam/Dedukti.git $SOURCES
+cd $SOURCES
 git checkout $1
+
+hashrev=$(git rev-parse HEAD)
+
+log "$hashrev"
 
 $timec -a -o $log_file make
 
