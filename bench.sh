@@ -1,34 +1,36 @@
 #!/bin/bash
 
-log_file=$dir/log
 sep='|'
+default_output_file=results.csv
+sources_folder=dedukti
 
-SOURCES=$dir/dedukti/
 
-timec=/usr/bin/time
-
-time_format="%E $sep %U $sep %S $sep %M $sep %K $sep %W"
-
-dir=$(pwd)
-date=$(date)
 uuid=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+date=$(date)
 
-echo "-------------------------------------------------------"
-echo "             Dedukti Benchmarking Tool"
-echo "-------------------------------------------------------"
-echo "  Bench nb: $uuid"
-echo "  Date:     $date"
-echo "  Revision: $1"
-echo "-------------------------------------------------------"
+echo "-------------------------------------------------------------"
+echo "                 Dedukti Benchmarking Tool"
+echo "-------------------------------------------------------------"
+echo "    Bench nb: $uuid"
+echo "    Date:     $date"
+echo "    Revision: $1"
+echo "-------------------------------------------------------------"
 
+
+output="${output:-$default_output_file}"
+dir=$(pwd)
+out_file=$dir/$output
+SOURCES=$dir/$sources_folder/
 DKCHECK=$SOURCES/dkcheck.native
 
+timec=/usr/bin/time
+time_format=" $sep %E $sep %U $sep %S $sep %M $sep %K $sep %W"
 export TIME="$time_format"
 
-printf "$uuid" > $log_file
+printf "$uuid" > $out_file
 
 log () {
-	printf " $sep $1" >> $log_file
+	printf " $sep $1" >> $out_file
 }
 
 log "$date"
@@ -43,6 +45,18 @@ hashrev=$(git rev-parse HEAD)
 
 log "$hashrev"
 
-$timec -a -o $log_file make
+$timec -a -o $out_file make
 
-cd $dir
+
+
+# Run tests here
+
+
+
+
+
+echo "-------------------------------------------------------------"
+echo "                    Benchmarks done !"
+echo "-------------------------------------------------------------"
+echo "    Results are saved in: $out_file"
+echo "-------------------------------------------------------------"
