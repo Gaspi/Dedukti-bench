@@ -84,36 +84,57 @@ export DKDEP=$SOURCES/dkdep.native
 echo "-------------------------------------------------------------"
 echo "                    Bench 2 : Matita"
 echo "-------------------------------------------------------------"
-mkdir $BENCHS/bench2
-cd $BENCHS/bench2
+mkdir $BENCHS/matita
+cd $BENCHS/matita
 
 wget -q https://deducteam.github.io/data/libraries/matita.tar.gz
 tar zxf matita.tar.gz
-rm matita/matita_arithmetics_factorial.dk
-rm matita/matita_arithmetics_binomial.dk
-rm matita/matita_arithmetics_chebyshev_*.dk
-rm matita/matita_arithmetics_chinese_reminder.dk
-rm matita/matita_arithmetics_congruence.dk
-rm matita/matita_arithmetics_fermat_little_theorem.dk
-rm matita/matita_arithmetics_gcd.dk
-rm matita/matita_arithmetics_ord.dk
-rm matita/matita_arithmetics_primes.dk
+# Editing factorial file : turning le_fact_10 into an axiom
+sed -i '30816,33252d'  matita/matita_arithmetics_factorial.dk
+sed -i '30815s/.*/\./'  matita/matita_arithmetics_factorial.dk
+sed -i 's/def le_fact_10 :/le_fact_10 :/'  matita/matita_arithmetics_factorial.dk
 
-$timec -a -o $BENCHS/bench2/time.csv make -C matita
-log_file $BENCHS/bench2/time.csv
+$timec -a -o $BENCHS/matita/time.csv make -C matita
+log_file $BENCHS/matita/time.csv
 
 
 
 echo "-------------------------------------------------------------"
-echo "                    Bench 3 : DKlib"
+echo "                    Bench 3 : Matita / Factorial"
 echo "-------------------------------------------------------------"
-mkdir $BENCHS/bench3
-cd $BENCHS/bench3
+# Reextracting original matita_arithmetics_factorial.dk
+tar zxf matita.tar.gz matita/matita_arithmetics_factorial.dk
+rm matita/matita_arithmetics_factorial.dko
+
+$timec -a -o $BENCHS/matita/time_fact.csv make -C matita
+log_file $BENCHS/matita/time_fact.csv
+
+
+
+echo "-------------------------------------------------------------"
+echo "                    Bench 4 : Examples"
+echo "-------------------------------------------------------------"
+cp $BENCHS/matita/matita/Makefile $SOURCES/examples/Makefile
+$timec -a -o $SOURCES/examples.csv make -C $SOURCES/examples
+log_file $SOURCES/examples.csv
+
+
+# Exporting DKCHECK and DKDEP to be used in following tests
+export DKCHECK=$SOURCES/dkcheck.native
+export DKDEP=$SOURCES/dkdep.native
+
+
+
+echo "-------------------------------------------------------------"
+echo "                    Bench 5 : DKlib"
+echo "-------------------------------------------------------------"
+mkdir $BENCHS/dklib
+cd $BENCHS/dklib
 
 git clone -q -b v2.6 https://github.com/rafoo/dklib.git
 
-$timec -a -o $BENCHS/bench3/time.csv make -C dklib
-log_file $BENCHS/bench3/time.csv
+$timec -a -o $BENCHS/dklib/time.csv make -C dklib
+log_file $BENCHS/dklib/time.csv
 
 
 

@@ -1,10 +1,12 @@
 
 db=$1
+nb_benchs=5
 
+base_fields="bench_version bench_timestamp bench_argument commit_hash commit_timestamp"
+bench_fields="real_time user_time kernel_time max_memory mean_memory swaps status"
 
 echo "-------------------------------------------------------------"
-echo "                 Creating fresh database"
-echo "-------------------------------------------------------------"
+echo "    Creating fresh database: $db"
 
 printf "bench_id" > $db
 
@@ -12,25 +14,25 @@ pr () {
 	printf " | $1" >> $db
 }
 
-pr "bench_version"
-pr "bench_timestamp"
-pr "bench_argument"
-pr "commit_hash"
-pr "commit_timestamp"
+for field in $base_fields
+do
+	pr "$field"
+done
 
 pr_times () {
-	pr "bench$1_real_time"
-	pr "bench$1_user_time"
-	pr "bench$1_kernel_time"
-	pr "bench$1_max_memory"
-	pr "bench$1_mean_memory"
-	pr "bench$1_swaps"
-	pr "bench$1_status"
+	for field in $bench_fields
+	do
+		pr "bench$1_$field"
+	done
 }
 
-pr_times 0
-pr_times 1
-pr_times 2
-pr_times 3
+for i in $(seq 0 $nb_benchs)
+do
+	pr_times $i
+done
 
 echo "" >> $db
+
+
+echo "    Done."
+echo "-------------------------------------------------------------"
