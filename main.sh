@@ -3,6 +3,12 @@
 dir=$(pwd)
 source $dir/paths.sh
 
+# If database does not exist, start by creating it.
+if [ ! -f $database ]
+then
+	bash $dir/fresh-db.sh "$database"
+fi
+
 echo ""
 echo "-------------------------------------------------------------"
 echo "                 Dedukti Benchmarking Tool"

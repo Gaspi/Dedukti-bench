@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Number of bench expected
-benchs_required=1
+benchs_required=5
 
 # Separator between fields of the csv database
 sep='|'
@@ -46,9 +46,3 @@ BENCHS=$dir/$benchs_folder/
 
 # Path to source folder
 SOURCES=$dir/$sources_folder/
-
-# If database does not exist, start by creating it.
-if [ ! -f $database ]
-then
-	bash $dir/fresh-db.sh "$database"
-fi

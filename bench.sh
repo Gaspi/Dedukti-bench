@@ -7,6 +7,12 @@ uuid=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 date_unix_timestamp=$(date +%s)
 date=$(date -d @$date_unix_timestamp)
 
+# If database does not exist, start by creating it.
+if [ ! -f $database ]
+then
+	bash $dir/fresh-db.sh "$database"
+fi
+
 echo ""
 echo "-------------------------------------------------------------"
 echo "                       Running bench"
