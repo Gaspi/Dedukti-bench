@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir=$(pwd)
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $dir/paths.sh
 
 uuid=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)

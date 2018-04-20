@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir=$(pwd)
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $dir/paths.sh
 
 # If database does not exist, start by creating it.

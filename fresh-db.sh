@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir=$(pwd)
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $dir/paths.sh
 
 db=$1
