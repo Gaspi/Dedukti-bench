@@ -29,7 +29,7 @@ whitelist=$dir/whitelist
 script_version=0.1
 
 # Number of different bench available
-nb_benchs=5
+nb_benchs=6
 
 # First fields, general information
 base_fields="bench_version bench_timestamp bench_argument commit_hash commit_timestamp"

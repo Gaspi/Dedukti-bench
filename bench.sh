@@ -117,11 +117,6 @@ $timec -a -o $SOURCES/examples.csv make -C $SOURCES/examples
 log_file $SOURCES/examples.csv
 
 
-# Exporting DKCHECK and DKDEP to be used in following tests
-export DKCHECK=$SOURCES/dkcheck.native
-export DKDEP=$SOURCES/dkdep.native
-
-
 
 echo ""
 echo "-------------------------------------------------------------"
@@ -132,8 +127,26 @@ cd $BENCHS/dklib
 
 git clone -q -b v2.6 https://github.com/rafoo/dklib.git
 
+# Fixing Makefile
+sed -i "/^DKCHECK *=/ d" $BENCHS/dklib/dklib/Makefile
+sed -i "/^DKDEP *=/ d"   $BENCHS/dklib/dklib/Makefile
+
 $timec -a -o $BENCHS/dklib/time.csv make -C dklib
 log_file $BENCHS/dklib/time.csv
+
+
+
+echo ""
+echo "-------------------------------------------------------------"
+echo "                    Bench 6 : Libraries"
+echo "-------------------------------------------------------------"
+mkdir $BENCHS/libraries
+cd $BENCHS/libraries
+
+git clone -q https://github.com/Deducteam/Libraries.git
+
+$timec -a -o $BENCHS/libraries/time.csv make -C Libraries
+log_file $BENCHS/libraries/time.csv
 
 
 
