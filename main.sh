@@ -32,7 +32,9 @@ done
 if [ -z "$chosen_bench" ]
 then
 	echo "    No further bench to run."
+	exit 0   # Success, stop running benches
 else
 	echo "    Found one: $chosen_bench"
 	bash $dir/bench.sh $chosen_bench
+	exit 1   # Keep running benches
 fi
