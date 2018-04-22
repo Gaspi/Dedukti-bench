@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Number of bench expected
-benchs_required=5
+benchs_required=8
 
 # Separator between fields of the csv database
 sep='|'
